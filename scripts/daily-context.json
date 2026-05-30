@@ -1,0 +1,47 @@
+{
+  "day": 21,
+  "date": "2026-05-30",
+  "version": "1.21.0",
+  "project_name": "x-template-021",
+  "theme": {
+    "name": "Grid Line Clarity",
+    "style": "Modern Swiss, Structured, Minimalist",
+    "mood": "precise, organized, clean, functional"
+  },
+  "palette": {
+    "background": "#1A1A1A",
+    "surface": "#282828",
+    "primary": "#007AFF",
+    "accent": "#6AFF00",
+    "text": "#FFFFFF",
+    "muted": "#AAAAAA"
+  },
+  "typography": {
+    "heading": "Inter",
+    "body": "Inter",
+    "size": "medium"
+  },
+  "layout": {
+    "structure": "grid",
+    "density": "normal",
+    "border_style": "thin solid lines, geometric"
+  },
+  "animation": {
+    "level": "minimal",
+    "style": "subtle transitions, crisp fades"
+  },
+  "components": {
+    "hero_text": "GRID PRECISION",
+    "subtitle": "Structured interfaces for clear communication.",
+    "button_label": "EXPLORE GRIDS",
+    "badge_text": "NEW RELEASE"
+  },
+  "commit_message": "feat: UI Day 21 — Grid Line Clarity",
+  "source": "gemini-key1",
+  "selected_component": {
+    "category": "Buttons",
+    "component": "sahilxkhadka_rotten-grasshopper-44.html",
+    "path": "C:\\Users\\User\\Documents\\GitHub\\Axon\\x-components\\Buttons\\sahilxkhadka_rotten-grasshopper-44.html",
+    "content": "<!-- Tags: button, download, button hover effect  -->\n<button class=\"cursor-pointer group relative flex gap-1.5 px-8 py-4 bg-black bg-opacity-80 text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 transition font-semibold shadow-md\">\n  <svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" height=\"24px\" width=\"24px\"><g stroke-width=\"0\" id=\"SVGRepo_bgCarrier\"></g><g stroke-linejoin=\"round\" stroke-linecap=\"round\" id=\"SVGRepo_tracerCarrier\"></g><g id=\"SVGRepo_iconCarrier\"> <g id=\"Interface / Download\"> <path stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\" stroke=\"#f1f1f1\" d=\"M6 21H18M12 3V17M12 17L17 12M12 17L7 12\" id=\"Vector\"></path> </g> </g></svg>\n  Download\n  <div class=\"absolute opacity-0 -bottom-full rounded-md py-2 px-2 bg-black bg-opacity-70 left-1/2 -translate-x-1/2 group-hover:opacity-100 transition-opacity shadow-lg\">\n    Download\n  </div>\n</button>"
+  }
+}

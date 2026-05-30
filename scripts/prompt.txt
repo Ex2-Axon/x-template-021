@@ -1,0 +1,134 @@
+You are building a daily UI project. Below is the theme specification for today.
+
+## Theme Context (daily-context.json)
+```json
+{
+  "day": 21,
+  "date": "2026-05-30",
+  "version": "1.21.0",
+  "project_name": "x-template-021",
+  "theme": {
+    "name": "Grid Line Clarity",
+    "style": "Modern Swiss, Structured, Minimalist",
+    "mood": "precise, organized, clean, functional"
+  },
+  "palette": {
+    "background": "#1A1A1A",
+    "surface": "#282828",
+    "primary": "#007AFF",
+    "accent": "#6AFF00",
+    "text": "#FFFFFF",
+    "muted": "#AAAAAA"
+  },
+  "typography": {
+    "heading": "Inter",
+    "body": "Inter",
+    "size": "medium"
+  },
+  "layout": {
+    "structure": "grid",
+    "density": "normal",
+    "border_style": "thin solid lines, geometric"
+  },
+  "animation": {
+    "level": "minimal",
+    "style": "subtle transitions, crisp fades"
+  },
+  "components": {
+    "hero_text": "GRID PRECISION",
+    "subtitle": "Structured interfaces for clear communication.",
+    "button_label": "EXPLORE GRIDS",
+    "badge_text": "NEW RELEASE"
+  },
+  "commit_message": "feat: UI Day 21 — Grid Line Clarity",
+  "source": "gemini-key1",
+  "selected_component": {
+    "category": "Forms",
+    "component": "themrsami_happy-dingo-51.html",
+    "path": "C:\\Users\\User\\Documents\\GitHub\\Axon\\x-components\\Forms\\themrsami_happy-dingo-51.html",
+    "content": "<!-- Tags: material design, purple, form, futuristic, tailwind -->\n<div class=\"flex flex-col items-center justify-center h-screen dark\">\n  <div class=\"w-full max-w-md bg-gray-800 rounded-lg shadow-md p-6\">\n    <h2 class=\"text-2xl font-bold text-gray-200 mb-4\">Login</h2>\n    <form class=\"flex flex-col\">\n      <input placeholder=\"Email address\" class=\"bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150\" type=\"email\">\n      <input placeholder=\"Password\" class=\"bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150\" type=\"password\">\n      <div class=\"flex items-center justify-between flex-wrap\">\n        <label class=\"text-sm text-gray-200 cursor-pointer\" for=\"remember-me\">\n          <input class=\"mr-2\" id=\"remember-me\" type=\"checkbox\">\n          Remember me\n        </label>\n        <a class=\"text-sm text-blue-500 hover:underline mb-0.5\" href=\"#\">Forgot password?</a>\n        <p class=\"text-white mt-4\"> Don't have an account? <a class=\"text-sm text-blue-500 -200 hover:underline mt-4\" href=\"#\">Signup</a></p>\n      </div>\n      <button class=\"bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150\" type=\"submit\">Login</button>\n    </form>\n  </div>\n</div>"
+  }
+}
+```
+
+## Selected Component Reference
+- Category: Forms
+- Component: themrsami_happy-dingo-51.html
+- Path: C:\Users\User\Documents\GitHub\Axon\x-components\Forms\themrsami_happy-dingo-51.html
+
+Use the selected component HTML below as the primary design reference for the new UI. Keep the structure and styling assumptions in mind while rewriting the requested files.
+```html
+<!-- Tags: material design, purple, form, futuristic, tailwind -->
+<div class="flex flex-col items-center justify-center h-screen dark">
+  <div class="w-full max-w-md bg-gray-800 rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold text-gray-200 mb-4">Login</h2>
+    <form class="flex flex-col">
+      <input placeholder="Email address" class="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="email">
+      <input placeholder="Password" class="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="password">
+      <div class="flex items-center justify-between flex-wrap">
+        <label class="text-sm text-gray-200 cursor-pointer" for="remember-me">
+          <input class="mr-2" id="remember-me" type="checkbox">
+          Remember me
+        </label>
+        <a class="text-sm text-blue-500 hover:underline mb-0.5" href="#">Forgot password?</a>
+        <p class="text-white mt-4"> Don't have an account? <a class="text-sm text-blue-500 -200 hover:underline mt-4" href="#">Signup</a></p>
+      </div>
+      <button class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150" type="submit">Login</button>
+    </form>
+  </div>
+</div>
+```
+
+## Your Task
+Completely redesign the UI by rewriting these three files from scratch:
+- `src/App.tsx`
+- `src/App.css`
+- `src/index.css`
+
+## Rules for App.tsx
+1. Keep ALL existing imports:
+   - `import { useState, useEffect, useRef } from 'react'`
+   - `import reactLogo from './assets/react.svg'`
+   - `import viteLogo from './assets/vite.svg'`
+   - `import heroImg from './assets/hero.png'`
+   - `import './App.css'`
+2. Keep the `CounterNum` component (useRef + useEffect animation)
+3. Keep the counter button with `onClick` / `setCount` handler
+4. Keep the Documentation section (Vite/React links)
+5. Keep the Social section (GitHub/Discord/X/Bluesky links + SVG icons)
+6. Do NOT use CSS custom properties (`--var-name`) in inline `style` attributes — TypeScript will error
+
+## Rules for CSS
+- Apply the palette, typography, layout structure, animation level, and component text from the JSON above
+- Use Google Fonts via `@import` in `index.css`
+- Match the theme mood: precise, organized, clean, functional
+
+## Mandatory Requirements (apply to every build)
+
+### 1. Responsive — Mobile First
+- Design for mobile (320px) first, scale up with `min-width` breakpoints
+- Touch targets minimum 44×44px
+- No horizontal scroll on any screen size
+- Fluid typography: use `clamp()` or responsive units (`rem`, `%`, `vw`)
+- Images and layout must reflow gracefully at 320px, 768px, 1280px
+
+### 2. Footer Copyright
+- The page MUST have a `<footer>` at the bottom
+- Footer text: `© 2026 Microtronic. All rights reserved.`
+- Style the footer to match the theme palette (muted text on surface background)
+
+### 3. SEO Standards
+- `index.html` must have a descriptive `<title>`: `GRID PRECISION — Grid Line Clarity | Microtronic`
+- Add `<meta name="description">` with the subtitle: `Structured interfaces for clear communication.`
+- Add `<meta name="keywords">` relevant to the theme
+- Add Open Graph tags: `og:title`, `og:description`, `og:type` (website)
+- All images must have meaningful `alt` attributes
+- Use semantic HTML: `<header>`, `<main>`, `<section>`, `<footer>`, `<nav>` where appropriate
+- Heading hierarchy: one `<h1>` (hero), `<h2>` for sections — no skipping levels
+
+## After saving all files
+1. Update `version` in `package.json` to `1.21.0`
+2. Update `<title>` and meta tags in `index.html` as specified above
+3. Run: `pnpm build`
+4. If build succeeds → write `done` to `scripts/build-done.flag`
+5. If build fails with TypeScript errors → fix them and rebuild
