@@ -20,7 +20,6 @@ jobs:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true' ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -34,7 +33,7 @@ env:
           node-version:
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true' '22'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true' '24'
 
       - name: Install Playwright
         run: |
@@ -48,7 +47,7 @@ env:
           
           const MAX_RETRIES = 5;
           const DELAY = 10000; // 10 seconds between retries
-          const URL = 'https://ex2-axon.github.io/x-template-021/';
+          const URL = 'https://ex2-axon.github.io/x-template-006/';
           
           for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
             try {
@@ -86,8 +85,8 @@ env:
       - name: Read package info
         id: pkg
         run: |
-          echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-          echo "app_name=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT
+          echo "version=$(node -p \"require('./package.json').version\")" >> $GITHUB_OUTPUT
+          echo "app_name=$(node -p \"require('./package.json').name\")" >> $GITHUB_OUTPUT
 
       - name: Get commit info
         id: commit
@@ -114,89 +113,58 @@ env:
           git push
 
       - name: Send to Discord
-        run: |
-          SITE_URL="https://ex2-axon.github.io/x-template-021/"
-          COMMIT_URL="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          curl -s -o /dev/null \
-            -F "payload_json={\"username\":\"Axon Deploy Bot\",\"embeds\":[{\"title\":\"${{ steps.pkg.outputs.app_name }} v${{ steps.pkg.outputs.version }} deployed\",\"url\":\"${SITE_URL}\",\"color\":65535,\"fields\":[{\"name\":\"Commit\",\"value\":\"${{ steps.commit.outputs.hash }} ${{ steps.commit.outputs.message }}\"}],\"image\":{\"url\":\"attachment://screenshot.png\"},\"timestamp\":\"${TIMESTAMP}\"}]}" \
-            -F "files[0]=@screenshot.png;type=image/png" \
-            "${{ secrets.DISCORD_WEBHOOK_URL }}"
-          echo "Sent to Discord"
-
-      - name: Post to Bluesky
-        run: |
-          cat > bsky.mjs << 'EOF'
-          import { readFileSync } from 'fs';
-
-          const BSKY_ID  = process.env.BSKY_IDENTIFIER;
-          const BSKY_PW  = process.env.BSKY_APP_PASSWORD;
-          const APP_NAME = process.env.APP_NAME;
-          const VERSION  = process.env.VERSION;
-          const COMMIT   = process.env.COMMIT_MSG;
-          const SITE_URL = 'https://ex2-axon.github.io/x-template-021/';
-
-          // 1. Auth
-          const authRes = await fetch('https://bsky.social/xrpc/com.atproto.server.createSession', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ identifier: BSKY_ID, password: BSKY_PW })
-          });
-          const auth = await authRes.json();
-          if (!auth.accessJwt) { console.error('Auth failed:', auth); process.exit(1); }
-
-          // 2. Upload image
-          const img = readFileSync('screenshot.png');
-          const blobRes = await fetch('https://bsky.social/xrpc/com.atproto.repo.uploadBlob', {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${auth.accessJwt}`, 'Content-Type': 'image/png' },
-            body: img
-          });
-          const blobData = await blobRes.json();
-
-          // 3. Build post text
-          const text = `${APP_NAME} v${VERSION} deployed\n\n${COMMIT}\n${SITE_URL}\n\n#webdev #vite #react`;
-          const enc = new TextEncoder();
-          const tb = enc.encode(text);
-          const ub = enc.encode(SITE_URL);
-          let byteStart = -1;
-          for (let i = 0; i <= tb.length - ub.length; i++) {
-            if ([...ub].every((b, j) => tb[i + j] === b)) { byteStart = i; break; }
-          }
-
-          // 4. Post
-          const postRes = await fetch('https://bsky.social/xrpc/com.atproto.repo.createRecord', {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${auth.accessJwt}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              repo: auth.did,
-              collection:
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true' 'app.bsky.feed.post',
-              record: {
-                $type: 'app.bsky.feed.post',
-                text,
-                facets: byteStart >= 0 ? [{
-                  index: { byteStart, byteEnd: byteStart + ub.length },
-                  features: [{ $type: 'app.bsky.richtext.facet#link', uri: SITE_URL }]
-                }] : [],
-                embed: {
-                  $type: 'app.bsky.embed.images',
-                  images: [{ image: blobData.blob, alt: `Screenshot of ${APP_NAME}` }]
-                },
-                createdAt: new Date().toISOString()
-              }
-            })
-          });
-          const result = await postRes.json();
-          if (result.uri) { console.log('Posted to Bluesky:', result.uri); }
-          else { console.error('Failed:', result); process.exit(1); }
-          EOF
-          node bsky.mjs
         env:
-          BSKY_IDENTIFIER: ${{ secrets.BSKY_IDENTIFIER }}
-          BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
           APP_NAME: ${{ steps.pkg.outputs.app_name }}
           VERSION: ${{ steps.pkg.outputs.version }}
+          COMMIT_HASH: ${{ steps.commit.outputs.hash }}
           COMMIT_MSG: ${{ steps.commit.outputs.message }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK" ]; then
+            echo "Discord Webhook URL is missing. Skipping notification."
+            exit 0
+          fi
+
+          cat > discord-notify.mjs << 'EOF'
+          import { readFileSync } from 'fs';
+
+          const webhookUrl = process.env.DISCORD_WEBHOOK;
+          const siteUrl = 'https://ex2-axon.github.io/x-template-006/';
+          
+          const payload = {
+            username: 'Axon Deploy Bot',
+            embeds: [{
+              title: `${process.env.APP_NAME} v${process.env.VERSION} deployed`,
+              url: siteUrl,
+              color: 0x00FFFF,
+              fields: [{
+                name: 'Commit',
+                value: `${process.env.COMMIT_HASH} ${process.env.COMMIT_MSG}`
+              }],
+              image: { url: 'attachment://screenshot.png' },
+              timestamp: new Date().toISOString()
+            }]
+          };
+
+          const formData = new FormData();
+          formData.append('payload_json', JSON.stringify(payload));
+          
+          const imageBuffer = readFileSync('screenshot.png');
+          const blob = new Blob([imageBuffer], { type: 'image/png' });
+          formData.append('files[0]', blob, 'screenshot.png');
+
+          const response = await fetch(webhookUrl, {
+            method: 'POST',
+            body: formData
+          });
+
+          if (response.ok) {
+            console.log('Sent to Discord');
+          } else {
+            console.error('Failed to send to Discord:', await response.text());
+            process.exit(1);
+          }
+          EOF
+          node discord-notify.mjs
+
+
